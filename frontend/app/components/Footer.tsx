@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Mail, Activity, Phone, MapPin } from "lucide-react";
+import Image from "next/image";
+import { Github, Linkedin, Twitter, Mail, Phone, MapPin } from "lucide-react";
 
 const SERVICES = [
   "Orthopedic Rehab",
@@ -35,18 +36,14 @@ const Footer: React.FC = () => {
 
           {/* ── Brand column ── */}
           <div className="space-y-6">
-            <Link href="/" className="inline-flex items-center gap-3 group" aria-label="Mano Rehabilitation Centre – home">
-              <div className="bg-clinic-primary p-2 rounded-xl text-white group-hover:rotate-[10deg] transition-transform duration-300">
-                <Activity size={26} />
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="text-3xl font-black tracking-tighter">
-                  Mano<span className="text-clinic-primary">Rehab</span>
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-clinic-pale/40 -mt-0.5">
-                  Physiotherapy Specialist
-                </span>
-              </div>
+            <Link href="/" aria-label="Mano Rehabilitation Centre – home">
+              <Image
+                src="/manoclinicbgrm.png"
+                alt="Mano Rehabilitation Centre"
+                width={180}
+                height={60}
+                className="h-14 w-auto object-contain brightness-0 invert"
+              />
             </Link>
 
             <p className="text-slate-400 text-lg leading-relaxed font-medium">
