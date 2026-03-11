@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, Activity } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
   { name: "Home", path: "/" },
@@ -47,18 +48,17 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-3 group" aria-label="Mano Rehabilitation Centre – home">
-          <div className="bg-clinic-primary p-2 rounded-xl text-white group-hover:rotate-[10deg] transition-transform duration-300">
-            <Activity size={28} />
-          </div>
-          <div className="flex flex-col items-start leading-none">
-            <span className={`text-2xl font-black tracking-tighter ${textColor}`}>
-              Mano<span className="text-clinic-primary">Rehab</span>
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-clinic-primary/60">
-              Physio Centre
-            </span>
-          </div>
+        <Link href="/" className="flex items-center" aria-label="Mano Rehabilitation Centre – home">
+          <Image
+            src="/manoclinicbgrm.png"
+            alt="Mano Rehabilitation Centre"
+            width={240}
+            height={80}
+            priority
+            className={`w-auto object-contain transition-all duration-500 ${
+              scrolled ? "h-12" : "h-20"
+            } ${isHomeDark ? "brightness-0 invert" : ""}`}
+          />
         </Link>
 
         {/* Desktop links */}
@@ -112,14 +112,15 @@ const Navbar: React.FC = () => {
       >
         {/* Overlay header */}
         <div className="p-6 flex justify-between items-center border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="bg-clinic-primary p-2 rounded-xl text-white">
-              <Activity size={22} />
-            </div>
-            <span className="text-2xl font-black text-white tracking-tighter">
-              Mano<span className="text-clinic-primary">Rehab</span>
-            </span>
-          </div>
+          <Link href="/" onClick={() => setIsOpen(false)}>
+            <Image
+              src="/manoclinicbgrm.png"
+              alt="Mano Rehabilitation Centre"
+              width={200}
+              height={500}
+              className="h-50 w-auto object-contain brightness-0 invert"
+            />
+          </Link>
           <button
             onClick={() => setIsOpen(false)}
             aria-label="Close navigation menu"
