@@ -123,24 +123,7 @@ const Hero: React.FC = () => {
               />
             </div>
 
-            {/* Floating call-to-action card */}
-            <div
-              className="absolute -bottom-10 -left-6 md:bottom-12 md:-left-12 bg-white p-6 rounded-[2rem] shadow-[0_32px_64px_-12px_rgba(22,169,174,0.15)] z-20 flex items-center space-x-4 animate-float border border-clinic-pale/20"
-              aria-label="Call for injury help – expert rehab support"
-            >
-              <div className="bg-clinic-bg p-4 rounded-2xl text-clinic-primary" aria-hidden="true">
-                <Phone size={24} />
-              </div>
-              <div>
-                <h4 className="text-slate-950 font-black text-base tracking-tight">
-                  Call For Injury Help
-                </h4>
-                <p className="text-clinic-grey text-xs font-bold uppercase tracking-wider">
-                  Expert Rehab Support
-                </p>
-              </div>
-            </div>
-
+            
             {/* Decorative orbit ring */}
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-white/5 rounded-full pointer-events-none"
