@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
             height={80}
             priority
             className={`w-auto object-contain transition-all duration-500 ${
-              scrolled ? "h-12" : "h-20"
+              scrolled ? "h-8" : "h-10"
             } ${isHomeDark ? "brightness-0 invert" : ""}`}
           />
         </Link>
