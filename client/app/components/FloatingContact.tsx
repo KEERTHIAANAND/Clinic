@@ -74,9 +74,6 @@ const FloatingContact: React.FC = () => {
           <span className="text-slate-900 font-black text-base md:text-lg tracking-tight leading-none">
             Call For Injury Help
           </span>
-          <span className="text-clinic-grey text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] mt-1">
-            Expert Rehab Support
-          </span>
           <span className="text-clinic-primary text-xs font-bold mt-0.5">
             {PHONE_DISPLAY}
           </span>
