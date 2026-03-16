@@ -11,8 +11,10 @@
 
   /* Alias tokens for mano classes used by Services section */
   --color-mano-primary: var(--color-clinic-primary);
+  --color-mano-accent: var(--color-clinic-accent);
   --color-mano-pale: var(--color-clinic-pale);
   --color-mano-bg: #f8fbfc;
+  --color-mano-dark: var(--color-clinic-dark);
   --color-mano-grey: var(--color-clinic-grey);
 
   /* Float animation */
