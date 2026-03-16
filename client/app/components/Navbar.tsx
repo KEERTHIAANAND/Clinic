@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about-us" },
   { name: "Services", path: "/services" },
-  { name: "Insights", path: "/blog" },
+  { name: "Blog", path: "/blog" },
   { name: "Contact", path: "/contact" },
 ] as const;
 
@@ -34,12 +34,12 @@ const Navbar: React.FC = () => {
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
-  const isHomeDark = pathname === "/" && !scrolled;
-  const textColor = isHomeDark ? "text-white" : "text-slate-900";
+  const isDarkPage = pathname === "/" && !scrolled;
+  const textColor = isDarkPage ? "text-white" : "text-slate-900";
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-100 transition-all duration-500 ${
         scrolled
           ? "bg-white/90 backdrop-blur-lg shadow-sm py-4"
           : "bg-transparent py-8"
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
             priority
             className={`w-auto object-contain transition-all duration-500 ${
               scrolled ? "h-8" : "h-10"
-            } ${isHomeDark ? "brightness-0 invert" : ""}`}
+            } ${isDarkPage ? "brightness-0 invert" : ""}`}
           />
         </Link>
 
@@ -106,7 +106,7 @@ const Navbar: React.FC = () => {
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
-        className={`lg:hidden fixed inset-0 bg-clinic-dark z-[110] transition-transform duration-500 ease-in-out ${
+        className={`lg:hidden fixed inset-0 bg-clinic-dark z-110 transition-transform duration-500 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -117,8 +117,8 @@ const Navbar: React.FC = () => {
               src="/manoclinicbgrm.png"
               alt="Mano Rehabilitation Centre"
               width={200}
-              height={500}
-              className="h-50 w-auto object-contain brightness-0 invert"
+              height={64}
+              className="h-12 w-auto object-contain brightness-0 invert"
             />
           </Link>
           <button
