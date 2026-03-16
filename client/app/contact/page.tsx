@@ -82,7 +82,7 @@ const ContactPage: React.FC = () => {
                     <div className="relative">
                       <select
                         id="service"
-                        className="w-full appearance-none bg-mano-bg/50 border border-mano-pale rounded-xl px-4 pr-11 py-3 md:py-3.5 text-sm md:text-base focus:outline-none focus:border-mano-primary transition-colors"
+                        className="w-full h-11 md:h-12 appearance-none bg-white border-2 border-[#16a9ae]/40 rounded-xl px-3 md:px-4 pr-12 text-sm md:text-base text-[#64748b] font-semibold focus:outline-none focus:border-[#16a9ae] focus:ring-3 focus:ring-[#16a9ae]/20 transition-all"
                         defaultValue=""
                       >
                         <option value="" disabled>
@@ -94,11 +94,13 @@ const ContactPage: React.FC = () => {
                           </option>
                         ))}
                       </select>
-                      <ChevronDown
-                        size={18}
-                        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-mano-grey"
-                        aria-hidden="true"
-                      />
+                      <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-[#16a9ae] flex items-center justify-center">
+                        <ChevronDown
+                          size={16}
+                          className="text-white"
+                          aria-hidden="true"
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className="space-y-2 min-w-0">
