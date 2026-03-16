@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, Star, ArrowRight } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
