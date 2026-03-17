@@ -5,14 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-
-const NAV_LINKS = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about-us" },
-  { name: "Services", path: "/services" },
-  { name: "Blog", path: "/blog" },
-  { name: "Contact", path: "/contact" },
-] as const;
+import { PRIMARY_NAV_LINKS } from "@/app/navigation/links";
+import { APP_ROUTES } from "@/app/navigation/routes";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +42,7 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
         {/* Brand */}
-        <Link href="/" className="flex items-center" aria-label="Mano Rehabilitation Centre – home">
+        <Link href={APP_ROUTES.home} className="flex items-center" aria-label="Mano Rehabilitation Centre home">
           <Image
             src="/manoclinicbgrm.png"
             alt="Mano Rehabilitation Centre"
@@ -63,16 +57,16 @@ const Navbar: React.FC = () => {
 
         {/* Desktop links */}
         <ul className="hidden lg:flex items-center space-x-10" role="list">
-          {NAV_LINKS.map((link) => (
-            <li key={link.name}>
+          {PRIMARY_NAV_LINKS.map((link) => (
+            <li key={link.href}>
               <Link
-                href={link.path}
+                href={link.href}
                 className={`text-[12px] font-bold uppercase tracking-[0.15em] transition-colors hover:text-clinic-primary ${
-                  pathname === link.path ? "text-clinic-primary" : textColor
+                  pathname === link.href ? "text-clinic-primary" : textColor
                 }`}
-                aria-current={pathname === link.path ? "page" : undefined}
+                aria-current={pathname === link.href ? "page" : undefined}
               >
-                {link.name}
+                {link.label}
               </Link>
             </li>
           ))}
@@ -81,7 +75,7 @@ const Navbar: React.FC = () => {
         {/* Desktop CTA */}
         <div className="hidden lg:block">
           <Link
-            href="/contact"
+            href={APP_ROUTES.contact}
             className="bg-clinic-primary text-white px-8 py-3.5 rounded-full text-sm font-bold hover:bg-clinic-accent transition-all duration-300 shadow-xl shadow-clinic-primary/20 active:scale-95"
           >
             Book Appointment
@@ -112,7 +106,7 @@ const Navbar: React.FC = () => {
       >
         {/* Overlay header */}
         <div className="p-6 flex justify-between items-center border-b border-white/10">
-          <Link href="/" onClick={() => setIsOpen(false)}>
+          <Link href={APP_ROUTES.home} onClick={() => setIsOpen(false)}>
             <Image
               src="/manoclinicbgrm.png"
               alt="Mano Rehabilitation Centre"
@@ -132,22 +126,22 @@ const Navbar: React.FC = () => {
 
         {/* Overlay links */}
         <nav className="p-8 space-y-8" aria-label="Mobile navigation">
-          {NAV_LINKS.map((link) => (
+          {PRIMARY_NAV_LINKS.map((link) => (
             <Link
-              key={link.name}
-              href={link.path}
+              key={link.href}
+              href={link.href}
               className={`block text-3xl font-bold transition-colors hover:text-clinic-primary ${
-                pathname === link.path ? "text-clinic-primary" : "text-white"
+                pathname === link.href ? "text-clinic-primary" : "text-white"
               }`}
-              aria-current={pathname === link.path ? "page" : undefined}
+              aria-current={pathname === link.href ? "page" : undefined}
               onClick={() => setIsOpen(false)}
             >
-              {link.name}
+              {link.label}
             </Link>
           ))}
 
           <Link
-            href="/contact"
+            href={APP_ROUTES.contact}
             className="block w-full bg-clinic-primary text-white text-center py-5 rounded-2xl text-xl font-bold hover:bg-clinic-accent transition-colors duration-300 active:scale-95"
             onClick={() => setIsOpen(false)}
           >

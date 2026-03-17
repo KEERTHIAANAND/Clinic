@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Play } from "lucide-react";
+import { APP_ROUTES } from "@/app/navigation/routes";
 
 const STATS = [
   { label: "Medical Professionals", value: "150+" },
@@ -71,7 +72,7 @@ const About: React.FC = () => {
 
             <div className="pt-6">
               <Link
-                href="/about-us"
+                href={APP_ROUTES.aboutUs}
                 className="inline-flex items-center space-x-3 bg-slate-900 text-white px-8 py-4 rounded-full font-bold hover:bg-slate-800 transition-all"
               >
                 <span>Meet Our Team</span>

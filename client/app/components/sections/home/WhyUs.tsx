@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Award, ArrowRight, Target, ThumbsUp } from "lucide-react";
+import { APP_ROUTES } from "@/app/navigation/routes";
 
 const REASONS = [
   {
@@ -74,7 +75,7 @@ const WhyUs: React.FC = () => {
             </div>
 
             <Link
-              href="/about-us"
+              href={APP_ROUTES.aboutUs}
               className="inline-flex items-center space-x-3 bg-mano-dark text-white px-10 py-5 rounded-full font-bold hover:bg-slate-800 transition-all active:scale-95 shadow-xl shadow-slate-200"
             >
               <span>Our Recovery Mission</span>

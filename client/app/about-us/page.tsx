@@ -1,6 +1,5 @@
-import React from "react";
-import About from "../components/About";
-import WhyUs from "../components/WhyUs";
+import { About, WhyUs } from "@/app/components/sections/home";
+import PageHero from "@/app/components/shared/PageHero";
 
 const CORE_VALUES = [
   {
@@ -17,17 +16,14 @@ const CORE_VALUES = [
   },
 ] as const;
 
-const AboutUsPage: React.FC = () => {
+const AboutUsPage = () => {
   return (
     <main className="pt-24">
-      <section className="bg-slate-950 py-24 text-center">
-        <div className="container mx-auto px-6">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">About Our Medical Care</h1>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Dedicated to improving community health through accessible, high-quality, and compassionate medical services.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="About Our Medical Care"
+        description="Dedicated to improving community health through accessible, high-quality, and compassionate medical services."
+        variant="deep"
+      />
 
       <About />
       <WhyUs />

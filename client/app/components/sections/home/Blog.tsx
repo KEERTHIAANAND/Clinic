@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, ChevronRight } from "lucide-react";
+import { APP_ROUTES } from "@/app/navigation/routes";
 
 const POSTS = [
   {
@@ -35,7 +36,7 @@ const Blog: React.FC = () => {
             </h2>
           </div>
           <Link
-            href="/blog"
+            href={APP_ROUTES.blog}
             className="w-16 h-16 bg-mano-bg rounded-full border border-mano-pale flex items-center justify-center hover:bg-mano-primary hover:text-white hover:border-mano-primary transition-all duration-500 shadow-sm"
             aria-label="View all blog articles"
           >
@@ -47,7 +48,7 @@ const Blog: React.FC = () => {
           {POSTS.map((post) => (
             <Link
               key={post.title}
-              href="/blog"
+              href={APP_ROUTES.blog}
               className="group block relative rounded-[3.5rem] overflow-hidden aspect-16/11 bg-mano-dark shadow-2xl"
             >
               <Image

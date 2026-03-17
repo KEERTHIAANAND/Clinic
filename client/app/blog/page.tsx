@@ -1,32 +1,29 @@
-import React from "react";
-import Blog from "../components/Blog";
+import { Blog } from "@/app/components/sections/home";
+import PageHero from "@/app/components/shared/PageHero";
 
-const BlogPage: React.FC = () => {
-	return (
-		<main className="pt-24">
-			<section className="bg-slate-900 py-24 text-center">
-				<div className="container mx-auto px-6">
-					<h1 className="text-5xl md:text-6xl font-bold text-white mb-6">Health Insights</h1>
-					<p className="text-xl text-slate-400 max-w-2xl mx-auto">
-						Stay updated with the latest medical trends, wellness tips, and clinic news.
-					</p>
-				</div>
-			</section>
+const BlogPage = () => {
+  return (
+    <main className="pt-24">
+      <PageHero
+        title="Health Insights"
+        description="Stay updated with the latest medical trends, wellness tips, and clinic news."
+        variant="neutral"
+      />
 
-			<Blog />
+      <Blog />
 
-			<section className="py-24 bg-white">
-				<div className="container mx-auto px-6 text-center">
-					<button
-						type="button"
-						className="bg-mano-primary text-white px-8 py-4 rounded-full font-bold hover:bg-mano-accent transition-colors shadow-xl"
-					>
-						Load More Articles
-					</button>
-				</div>
-			</section>
-		</main>
-	);
+      <section className="bg-white py-24">
+        <div className="container mx-auto px-6 text-center">
+          <button
+            type="button"
+            className="rounded-full bg-mano-primary px-8 py-4 font-bold text-white shadow-xl transition-colors hover:bg-mano-accent"
+          >
+            Load More Articles
+          </button>
+        </div>
+      </section>
+    </main>
+  );
 };
 
 export default BlogPage;

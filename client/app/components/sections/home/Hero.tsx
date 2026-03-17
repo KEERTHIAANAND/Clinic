@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Star, ArrowRight } from "lucide-react";
+import { APP_ROUTES } from "@/app/navigation/routes";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -64,7 +65,7 @@ const Hero: React.FC = () => {
             {/* CTA row */}
             <div className="flex flex-col sm:flex-row items-center gap-8">
               <Link
-                href="/contact"
+                href={APP_ROUTES.contact}
                 className="group w-full sm:w-auto bg-clinic-primary text-white px-10 py-5 rounded-full font-bold flex items-center justify-center space-x-3 hover:bg-clinic-accent transition-all duration-300 shadow-2xl shadow-clinic-primary/20 active:scale-95"
               >
                 <span>Book Free Consult</span>

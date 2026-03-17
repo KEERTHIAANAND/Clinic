@@ -1,7 +1,8 @@
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Github, Linkedin, Twitter, Mail, Phone, MapPin } from "lucide-react";
+import { LEGAL_NAV_LINKS } from "@/app/navigation/links";
+import { APP_ROUTES } from "@/app/navigation/routes";
 
 const SERVICES = [
   "Orthopedic Rehab",
@@ -36,7 +37,7 @@ const Footer: React.FC = () => {
 
           {/* ── Brand column ── */}
           <div className="space-y-6">
-            <Link href="/" aria-label="Mano Rehabilitation Centre – home">
+            <Link href={APP_ROUTES.home} aria-label="Mano Rehabilitation Centre home">
               <Image
                 src="/manoclinicbgrm.png"
                 alt="Mano Rehabilitation Centre"
@@ -76,7 +77,7 @@ const Footer: React.FC = () => {
               {SERVICES.map((item) => (
                 <li key={item}>
                   <Link
-                    href="/services"
+                    href={APP_ROUTES.services}
                     className="text-slate-400 hover:text-clinic-pale text-lg font-medium transition-colors flex items-center group"
                   >
                     <span className="w-0 group-hover:w-4 h-[1px] bg-clinic-primary mr-0 group-hover:mr-3 transition-all duration-300 shrink-0" />
@@ -153,12 +154,11 @@ const Footer: React.FC = () => {
             © {currentYear} Mano Rehabilitation Centre. All rights reserved.
           </p>
           <nav aria-label="Legal links" className="flex space-x-8 text-slate-500 text-xs font-bold uppercase tracking-widest">
-            <Link href="/privacy" className="hover:text-white transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-white transition-colors">
-              Terms of Service
-            </Link>
+            {LEGAL_NAV_LINKS.map((link) => (
+              <Link key={link.href} href={link.href} className="hover:text-white transition-colors">
+                {link.label}
+              </Link>
+            ))}
           </nav>
         </div>
       </div>

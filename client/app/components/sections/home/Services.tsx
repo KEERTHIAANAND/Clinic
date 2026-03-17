@@ -10,7 +10,8 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
-import { SERVICE_CATALOG, type ServiceKey } from "../data/services";
+import { SERVICE_CATALOG, type ServiceKey } from "@/app/data/services";
+import { APP_ROUTES } from "@/app/navigation/routes";
 
 const ICON_BY_SERVICE_KEY: Record<ServiceKey, LucideIcon> = {
   "orthopedic-rehab": Activity,
@@ -39,7 +40,7 @@ const Services: React.FC = () => {
             </h2>
           </div>
           <Link
-            href="/services"
+            href={APP_ROUTES.services}
             className="group text-mano-primary font-black flex items-center gap-3 hover:gap-5 transition-all uppercase tracking-widest text-sm"
           >
             All Therapy Options <ArrowUpRight size={22} />
@@ -51,7 +52,7 @@ const Services: React.FC = () => {
             const ServiceIcon = ICON_BY_SERVICE_KEY[service.key];
 
             return (
-              <Link key={service.key} href="/services" className="group block h-full">
+              <Link key={service.key} href={APP_ROUTES.services} className="group block h-full">
               <div className="bg-white p-12 rounded-[3.5rem] shadow-[0_10px_30px_-15px_rgba(22,169,174,0.1)] border border-mano-pale/20 h-full flex flex-col justify-between hover:shadow-[0_40px_80px_-20px_rgba(22,169,174,0.15)] hover:border-mano-primary transition-all duration-700 hover:-translate-y-3 relative overflow-hidden">
                 <div className="relative z-10 space-y-8">
                   <div className="w-20 h-20 bg-mano-bg text-mano-primary rounded-[1.75rem] flex items-center justify-center group-hover:bg-mano-primary group-hover:text-white transition-all duration-500 transform group-hover:rotate-10">

@@ -1,9 +1,11 @@
-import Hero from "./components/Hero";
-import About from "./components/About";
-import Services from "./components/Services";
-import WhyUs from "./components/WhyUs";
-import Testimonials from "./components/Testimonials";
-import Blog from "./components/Blog";
+import {
+  About,
+  Blog,
+  Hero,
+  Services,
+  Testimonials,
+  WhyUs,
+} from "@/app/components/sections/home";
 
 export default function Home() {
   return (
