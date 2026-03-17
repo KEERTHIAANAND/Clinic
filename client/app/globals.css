@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  /* Clinic brand palette */
+  --color-clinic-primary: #16a9ae;
+  --color-clinic-accent:  #0e7490;
+  --color-clinic-pale:    #99f6e4;
+  --color-clinic-dark:    #0d2222;
+  --color-clinic-bg:      #0f2828;
+  --color-clinic-grey:    #64748b;
+
+  /* Alias tokens for mano classes used by Services section */
+  --color-mano-primary: var(--color-clinic-primary);
+  --color-mano-accent: var(--color-clinic-accent);
+  --color-mano-pale: var(--color-clinic-pale);
+  --color-mano-bg: #f8fbfc;
+  --color-mano-dark: var(--color-clinic-dark);
+  --color-mano-grey: var(--color-clinic-grey);
+
+  /* Float animation */
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+body {
+  font-family: var(--font-geist-sans, Arial, Helvetica, sans-serif);
+}
+
+.font-span {
+  font-family: var(--font-geist-sans, Arial, Helvetica, sans-serif);
+}
