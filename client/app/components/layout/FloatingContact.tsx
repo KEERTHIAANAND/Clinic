@@ -15,7 +15,7 @@ const FloatingContact: React.FC = () => {
 
   return (
     <div
-      className="fixed bottom-6 right-6 z-150 flex items-center justify-end"
+      className="fixed bottom-6 right-6 z-40 flex items-center justify-end"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
