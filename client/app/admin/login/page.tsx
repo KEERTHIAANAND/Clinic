@@ -1,20 +1,46 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
     setIsLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    setIsLoading(false);
+      // Basic validation - replace with real API call
+      if (email === "admin@example.com" && password === "password123") {
+        localStorage.setItem("adminAuth", "true");
+        router.push("/admin/dashboard");
+      } else {
+        setError("Invalid email or password");
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setError("Login failed. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -27,6 +53,11 @@ export default function AdminLoginPage() {
           </header>
 
           <form onSubmit={handleSubmit} className="space-y-5" suppressHydrationWarning>
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-medium">
+                {error}
+              </div>
+            )}
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium text-slate-700">
                 Email
