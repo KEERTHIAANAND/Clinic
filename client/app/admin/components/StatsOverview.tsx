@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useRef } from 'react';
-import { Appointment } from '../types';
+import { Appointment } from '@/app/admin/types';
 
 interface StatsOverviewProps {
   appointments: Appointment[];
@@ -125,7 +125,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
         }
       `}} />
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-100 rounded-[2rem] p-5 px-8 shadow-sm gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-100 rounded-4xl p-5 px-8 shadow-sm gap-4">
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 rounded-2xl bg-[#f8fafc] border border-slate-100 flex items-center justify-center text-[#1e293b]">
              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,7 +182,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
               activeFilter === stat.id ? `ring-2 ${stat.activeColor} border-transparent shadow-xl` : 'border-gray-100 hover:shadow-lg'
             }`}
           >
-            <div className={`p-5 rounded-[2rem] ${stat.color} shadow-sm transition-transform duration-300 ${activeFilter === stat.id ? 'scale-110' : ''}`}>
+            <div className={`p-5 rounded-4xl ${stat.color} shadow-sm transition-transform duration-300 ${activeFilter === stat.id ? 'scale-110' : ''}`}>
               {stat.icon}
             </div>
             <div>
