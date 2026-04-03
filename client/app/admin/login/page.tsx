@@ -18,8 +18,8 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-linear-to-br from-slate-100 via-gray-100 to-zinc-200 p-4">
-      <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center">
+    <main className="h-screen bg-linear-to-br from-slate-100 via-gray-100 to-zinc-200 p-4 overflow-hidden">
+      <div className="flex h-full items-center justify-center">
         <section className="w-full max-w-md rounded-2xl border border-slate-200 bg-white/95 p-8 shadow-2xl backdrop-blur">
           <header className="mb-8 text-center">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">Admin Login</h1>
