@@ -1,44 +1,62 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import StatsOverview from '../components/StatsOverview';
 import Calendar from '../components/Calendar';
+import DailyAppointmentsModal from '../components/DailyAppointmentsModal';
+import PatientManagementList from '../components/PatientManagementList';
 import { Appointment, Patient } from '@/app/admin/types';
 import { mockAppointments } from '../services/mockData';
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isAuthenticated = useSyncExternalStore(
+    () => () => {},
+    () => window.localStorage.getItem('adminAuth') === 'true',
+    () => false,
+  );
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
+  const [appointments] = useState<Appointment[]>(mockAppointments);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [isDailyAppointmentsOpen, setIsDailyAppointmentsOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'monthly' | 'daily'>('monthly');
 
   useEffect(() => {
-    const auth = localStorage.getItem("adminAuth");
-    if (!auth) {
-      router.push("/admin/login");
-    } else {
-      setIsAuthenticated(true);
+    if (!isAuthenticated) {
+      router.replace('/admin/login');
     }
-  }, [router]);
+  }, [isAuthenticated, router]);
 
   const handleFilterChange = (filter: string | null) => {
     setActiveFilter(filter);
+    setViewMode(filter ? 'daily' : 'monthly');
   };
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
+    setViewMode('daily');
+    setActiveFilter('All');
   };
 
   const handleShowCalendar = () => {
-    // Calendar is always shown below stats in this layout.
+    setActiveFilter(null);
+    setViewMode('monthly');
   };
 
   const handlePatientClick = (patient: Patient) => {
     setSelectedPatient(patient);
+    setIsDailyAppointmentsOpen(false);
   };
+
+  const selectedDateKey = useMemo(() => {
+    return `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+  }, [selectedDate]);
+
+  const selectedDateAppointments = useMemo(() => {
+    return appointments.filter((appointment) => appointment.date === selectedDateKey);
+  }, [appointments, selectedDateKey]);
 
   const handleLogout = () => {
     localStorage.removeItem("adminAuth");
@@ -80,19 +98,45 @@ export default function AdminDashboard() {
           onShowCalendar={handleShowCalendar}
         />
 
-        <Calendar
-          appointments={appointments}
-          selectedDate={selectedDate}
-          onDateChange={handleDateChange}
-          onPatientClick={handlePatientClick}
-        />
+        {viewMode === 'daily' ? (
+          <PatientManagementList
+            filter={activeFilter || 'All'}
+            appointments={appointments}
+            onPatientClick={handlePatientClick}
+            onClose={handleShowCalendar}
+            selectedDate={selectedDate}
+          />
+        ) : (
+          <Calendar
+            appointments={appointments}
+            selectedDate={selectedDate}
+            onDateChange={(date) => {
+              setSelectedDate(date);
+              setIsDailyAppointmentsOpen(true);
+            }}
+          />
+        )}
 
         {selectedPatient && (
-          <div className="mt-10 p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-bold text-slate-900 mb-2">{selectedPatient.name}</h3>
-            <p className="text-sm text-slate-600">{selectedPatient.email}</p>
-            <p className="text-sm text-slate-600">{selectedPatient.phone}</p>
+          <div className="mt-10 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Patient Summary</p>
+            <h3 className="text-lg font-bold text-slate-900 mb-4">{selectedPatient.name}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
+              <p>{selectedPatient.email || 'No email available'}</p>
+              <p>{selectedPatient.phone || 'No phone number available'}</p>
+              <p>{selectedPatient.currentCondition || 'No current condition documented'}</p>
+              <p>{selectedPatient.treatmentPlan || 'No treatment plan documented'}</p>
+            </div>
           </div>
+        )}
+
+        {isDailyAppointmentsOpen && (
+          <DailyAppointmentsModal
+            date={selectedDate}
+            appointments={selectedDateAppointments}
+            onClose={() => setIsDailyAppointmentsOpen(false)}
+            onPatientClick={handlePatientClick}
+          />
         )}
       </div>
     </div>
