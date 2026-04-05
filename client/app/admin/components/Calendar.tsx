@@ -1,17 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Appointment, Patient } from '@/app/admin/types';
+import { Appointment } from '@/app/admin/types';
 import { mockPatients } from '../services/mockData';
 
 interface CalendarProps {
   appointments: Appointment[];
   selectedDate: Date;
   onDateChange: (date: Date) => void;
-  onPatientClick: (patient: Patient) => void;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ appointments, selectedDate, onDateChange, onPatientClick }) => {
+const Calendar: React.FC<CalendarProps> = ({ appointments, selectedDate, onDateChange }) => {
   const [viewDate, setViewDate] = useState(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
 
   const daysInMonth = (y: number, m: number) => new Date(y, m + 1, 0).getDate();
