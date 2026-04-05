@@ -22,6 +22,10 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
 }) => {
   const dateInputRef = useRef<HTMLInputElement>(null);
 
+  type DateInputWithPicker = HTMLInputElement & {
+    showPicker?: () => void;
+  };
+
   const isoDate = useMemo(() => {
     return `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
   }, [selectedDate]);
@@ -50,8 +54,9 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
 
   const handleDateDisplayClick = () => {
     if (dateInputRef.current) {
-      if (typeof (dateInputRef.current as any).showPicker === 'function') {
-        (dateInputRef.current as any).showPicker();
+      const input = dateInputRef.current as DateInputWithPicker;
+      if (typeof input.showPicker === 'function') {
+        input.showPicker();
       } else {
         dateInputRef.current.focus();
       }
