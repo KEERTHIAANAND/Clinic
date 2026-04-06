@@ -1,0 +1,218 @@
+'use client';
+
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import PatientDetailsModal from '../components/PatientDetailsModal';
+import { Appointment, Patient } from '@/app/admin/types';
+import { mockAppointments, mockPatients } from '../services/mockData';
+
+export default function PatientsPage() {
+  const router = useRouter();
+  const isAuthenticated = useSyncExternalStore(
+    () => () => {},
+    () => window.localStorage.getItem('adminAuth') === 'true',
+    () => false,
+  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [patientAppointments, setPatientAppointments] = useState<Appointment[]>([]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/admin/login');
+    }
+  }, [isAuthenticated, router]);
+
+  const backToDashboard = () => {
+    router.push('/admin/dashboard');
+  };
+
+  const rows = useMemo(() => {
+    return mockPatients.map((patient) => {
+      const records = mockAppointments.filter((appointment) => appointment.patientId === patient.id);
+      const latestAppointment = [...records].sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())[0];
+
+      return {
+        patient,
+        records,
+        latestAppointment,
+        lastVisit: latestAppointment?.date || null,
+      };
+    });
+  }, []);
+
+  const filteredRows = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return rows;
+    return rows.filter((row) => row.patient.name.toLowerCase().includes(query));
+  }, [rows, searchQuery]);
+
+  const visitedCount = useMemo(() => rows.filter((row) => row.records.length > 0).length, [rows]);
+
+  const handleOpenPatient = (patient: Patient) => {
+    const records = mockAppointments.filter((appointment) => appointment.patientId === patient.id);
+    const latestAppointment = [...records].sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())[0];
+
+    if (!latestAppointment) return;
+
+    setSelectedPatient(patient);
+    setSelectedAppointment(latestAppointment);
+    setPatientAppointments(records);
+  };
+
+  const handleClosePatient = () => {
+    setSelectedPatient(null);
+    setSelectedAppointment(null);
+    setPatientAppointments([]);
+  };
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="relative h-11 w-11">
+              <Image
+                src="/logo.png"
+                alt="Aura Health logo"
+                fill
+                sizes="44px"
+                priority
+                className="rounded-xl object-cover border border-slate-200 bg-white"
+              />
+            </div>
+            <div className="leading-tight">
+              <h1 className="text-xl md:text-2xl font-semibold tracking-tight text-slate-900" style={{ fontFamily: 'var(--font-poppins)' }}>
+                Aura Health
+              </h1>
+              <p className="text-[11px] font-semibold text-slate-500">Patient List</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={backToDashboard}
+              className="px-5 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-lg hover:bg-slate-800 transition-colors"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-6 md:px-10 py-10 space-y-6">
+        <section className="bg-white rounded-4xl border border-gray-100 shadow-sm p-6 md:p-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Patient Directory</p>
+              <h2 className="text-3xl font-black text-slate-900">All Patients</h2>
+              <p className="text-sm text-slate-500 mt-2">A dedicated list view for adding more features later.</p>
+            </div>
+
+            <div className="w-full lg:w-96">
+              <label className="sr-only" htmlFor="patient-search">Search patients</label>
+              <input
+                id="patient-search"
+                type="text"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Search by patient name"
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition-colors focus:border-teal-400 focus:bg-white"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="rounded-3xl border border-teal-100 bg-teal-50/60 p-5">
+              <p className="text-[10px] font-black text-teal-700 uppercase tracking-[0.2em]">Total Patients</p>
+              <p className="text-4xl font-black text-slate-900 mt-2">{rows.length}</p>
+            </div>
+            <div className="rounded-3xl border border-cyan-100 bg-cyan-50/60 p-5">
+              <p className="text-[10px] font-black text-cyan-700 uppercase tracking-[0.2em]">Visited Patients</p>
+              <p className="text-4xl font-black text-slate-900 mt-2">{visitedCount}</p>
+            </div>
+            <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Visible Rows</p>
+              <p className="text-4xl font-black text-slate-900 mt-2">{filteredRows.length}</p>
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-4xl border border-gray-100 bg-white shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Patient</th>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Age</th>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Gender</th>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Last Visit</th>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Status</th>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Appointments</th>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {filteredRows.map((row) => (
+                    <tr
+                      key={row.patient.id}
+                      className="group cursor-pointer transition-colors hover:bg-teal-50/50"
+                      onClick={() => handleOpenPatient(row.patient)}
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-4">
+                          <div className="h-11 w-11 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-black">
+                            {row.patient.name.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-900">{row.patient.name}</p>
+                            <p className="text-xs text-slate-500">{row.patient.id}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-700">{row.patient.age ?? '--'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-700">{row.patient.gender ?? '--'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-700">
+                        {row.lastVisit ? new Date(row.lastVisit).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No visit'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${row.records.length > 0 ? 'bg-teal-50 text-teal-700' : 'bg-slate-100 text-slate-500'}`}>
+                          {row.records.length > 0 ? 'Visited' : 'No Visits'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-slate-700">{row.records.length}</td>
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-semibold text-teal-700 group-hover:text-teal-800">View Details</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {filteredRows.length === 0 && (
+              <div className="px-6 py-14 text-center text-slate-500 font-semibold">
+                No patients match your search.
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+
+      {selectedPatient && selectedAppointment && (
+        <PatientDetailsModal
+          patient={selectedPatient}
+          appointment={selectedAppointment}
+          patientAppointments={patientAppointments}
+          onClose={handleClosePatient}
+        />
+      )}
+    </div>
+  );
+}
