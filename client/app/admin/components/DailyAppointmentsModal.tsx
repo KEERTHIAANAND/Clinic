@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Appointment, Patient } from '@/app/admin/types';
 import { mockPatients } from '../services/mockData';
 
@@ -17,6 +17,23 @@ const DailyAppointmentsModal: React.FC<DailyAppointmentsModalProps> = ({
   onClose,
   onPatientClick,
 }) => {
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    html.classList.add('lenis-stopped');
+
+    return () => {
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      html.classList.remove('lenis-stopped');
+    };
+  }, []);
+
   const patientsById = useMemo(() => {
     return new Map(mockPatients.map((patient) => [patient.id, patient]));
   }, []);
@@ -29,7 +46,10 @@ const DailyAppointmentsModal: React.FC<DailyAppointmentsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      <div className="w-full max-w-lg bg-white rounded-4xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+      <div
+        data-lenis-prevent
+        className="w-full max-w-lg bg-white rounded-4xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+      >
         <div className="px-8 py-6 flex justify-between items-start bg-[#fcfdfe] border-b border-gray-50">
           <div>
             <h2 className="text-2xl font-bold text-[#1e293b]">Daily Review</h2>
@@ -42,7 +62,10 @@ const DailyAppointmentsModal: React.FC<DailyAppointmentsModalProps> = ({
           </button>
         </div>
 
-        <div className="px-8 py-8 space-y-4 max-h-[60vh] overflow-y-auto">
+        <div
+          data-lenis-prevent
+          className="px-8 py-8 space-y-4 max-h-[60vh] overflow-y-auto overscroll-contain touch-pan-y"
+        >
           {appointments.length > 0 ? (
             appointments.map((app) => {
               const patient = app.patientId ? patientsById.get(app.patientId) : undefined;
