@@ -103,9 +103,12 @@ const PatientDetailsModal: React.FC<PatientDetailsModalProps> = ({
             </div>
           </section>
 
-          <section className="rounded-2xl border border-slate-100 p-5 bg-white">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Description</p>
-            <p className="text-sm leading-7 text-slate-700 mt-3">{description}</p>
+          <section className="rounded-2xl border border-mano-pale bg-mano-bg/60 p-5 shadow-sm shadow-mano-primary/5">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-mano-primary" aria-hidden="true"></span>
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-mano-grey">Description</p>
+            </div>
+            <p className="text-sm leading-7 text-mano-dark/90">{description}</p>
           </section>
 
           <section className="rounded-2xl border border-slate-100 p-5 bg-slate-50/60">
