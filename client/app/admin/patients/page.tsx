@@ -3,9 +3,92 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import PatientDetailsModal from '../components/PatientDetailsModal';
 import { Appointment, Patient } from '@/app/admin/types';
 import { mockAppointments, mockPatients } from '../services/mockData';
+
+function PatientRecordsModal({
+  patient,
+  appointments,
+  onClose,
+}: {
+  patient: Patient;
+  appointments: Appointment[];
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    html.classList.add('lenis-stopped');
+
+    return () => {
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      html.classList.remove('lenis-stopped');
+    };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/45 backdrop-blur-sm p-4">
+      <div data-lenis-prevent className="w-full max-w-3xl bg-white rounded-4xl shadow-2xl overflow-hidden">
+        <div className="px-8 py-6 border-b border-slate-100 bg-[#fcfdfe] flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Patient Records</p>
+            <h2 className="text-3xl font-black text-slate-900 mt-1">{patient.name}</h2>
+            <p className="text-sm text-slate-500 mt-1">Appointment history only</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="h-10 w-10 rounded-2xl border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors"
+          >
+            <span className="sr-only">Close records</span>
+            <svg className="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div data-lenis-prevent className="px-8 py-7 max-h-[75vh] overflow-y-auto overscroll-contain touch-pan-y space-y-4">
+          {appointments.length > 0 ? (
+            [...appointments]
+              .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())
+              .map((appointment) => (
+                <div key={appointment.id} className="rounded-2xl border border-slate-100 bg-slate-50/60 p-5">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-black text-slate-900">
+                        {new Date(appointment.date).toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        {appointment.time || '--:--'} · {appointment.doctorName || 'General Staff'}
+                      </p>
+                    </div>
+                    <span className="inline-flex rounded-full bg-teal-50 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-teal-700 w-fit">
+                      {appointment.status}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-700 mt-3 leading-7">
+                    {appointment.notes || appointment.description || 'No notes available'}
+                  </p>
+                </div>
+              ))
+          ) : (
+            <div className="text-center py-16 text-slate-500 font-semibold">No appointment records found.</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function PatientsPage() {
   const router = useRouter();
@@ -205,11 +288,10 @@ export default function PatientsPage() {
         </section>
       </main>
 
-      {selectedPatient && selectedAppointment && (
-        <PatientDetailsModal
+      {selectedPatient && (
+        <PatientRecordsModal
           patient={selectedPatient}
-          appointment={selectedAppointment}
-          patientAppointments={patientAppointments}
+          appointments={patientAppointments}
           onClose={handleClosePatient}
         />
       )}
