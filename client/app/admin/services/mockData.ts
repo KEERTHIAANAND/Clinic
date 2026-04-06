@@ -132,6 +132,34 @@ const appointmentNotes: { [key: string]: string[] } = {
   ],
 };
 
+const createAppointment = (params: {
+  id: string;
+  date: string;
+  status: Appointment['status'];
+  patientId: string;
+  slotIndex: number;
+  daySeed: number;
+  noteSeed: number;
+  emergency?: boolean;
+}): Appointment => {
+  const patient = mockPatients.find((p) => p.id === params.patientId) || mockPatients[0];
+  const patientNotes = appointmentNotes[patient.id] || [];
+  const note = patientNotes.length > 0 ? patientNotes[params.noteSeed % patientNotes.length] : undefined;
+
+  return {
+    id: params.id,
+    date: params.date,
+    status: params.status,
+    patientId: patient.id,
+    patientName: patient.name,
+    time: timeSlots[params.slotIndex % timeSlots.length],
+    type: params.slotIndex % 3 === 0 ? 'Initial' : params.slotIndex % 2 === 0 ? 'Follow-up' : 'Session',
+    doctorName: doctorPool[(params.daySeed + params.slotIndex) % doctorPool.length],
+    isEmergency: Boolean(params.emergency),
+    notes: params.status === 'Completed' ? note : undefined,
+  };
+};
+
 const generateAppointments = (): Appointment[] => {
   const results: Appointment[] = [];
   const today = new Date();
@@ -140,35 +168,36 @@ const generateAppointments = (): Appointment[] => {
 
   for (let day = 1; day <= 28; day++) {
     const date = createDateForCurrentMonth(day);
-    const sessionsPerDay = day % 2 === 0 ? 2 : 1;
 
-    for (let index = 0; index < sessionsPerDay; index++) {
+    // Keep data realistic for month view while ensuring rich card demos for today/yesterday.
+    const statusPattern: Appointment['status'][] =
+      day === currentDay
+        ? ['Completed', 'Completed', 'Cancelled', 'Upcoming', 'Upcoming']
+        : day === currentDay - 1
+          ? ['Completed', 'Completed', 'Completed', 'Cancelled']
+          : day < currentDay
+            ? day % 3 === 0
+              ? ['Completed', 'Completed', 'Cancelled']
+              : ['Completed', 'Completed']
+            : day % 2 === 0
+              ? ['Upcoming', 'Upcoming', 'Upcoming']
+              : ['Upcoming', 'Upcoming'];
+
+    statusPattern.forEach((status, index) => {
       const patient = mockPatients[(day + index) % mockPatients.length];
-      const isPast = day < currentDay;
-      const status: Appointment['status'] = isPast
-        ? index % 3 === 0
-          ? 'Cancelled'
-          : 'Completed'
-        : day === currentDay && index === 0
-          ? 'Completed'
-          : 'Upcoming';
-
-      const patientNotes = appointmentNotes[patient.id] || [];
-      const noteIndex = (day + index) % patientNotes.length;
-
-      results.push({
-        id: `a-${counter++}`,
-        date,
-        status,
-        patientId: patient.id,
-        patientName: patient.name,
-        time: timeSlots[(day + index) % timeSlots.length],
-        type: index % 3 === 0 ? 'Initial' : index % 2 === 0 ? 'Follow-up' : 'Session',
-        doctorName: doctorPool[(day + index) % doctorPool.length],
-        isEmergency: day === currentDay && index === 0,
-        notes: status === 'Completed' ? patientNotes[noteIndex] : undefined,
-      });
-    }
+      results.push(
+        createAppointment({
+          id: `a-${counter++}`,
+          date,
+          status,
+          patientId: patient.id,
+          slotIndex: index,
+          daySeed: day,
+          noteSeed: day + index,
+          emergency: day === currentDay && index === 0,
+        }),
+      );
+    });
   }
 
   return results;

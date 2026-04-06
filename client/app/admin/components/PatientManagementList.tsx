@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Appointment, Patient } from '@/app/admin/types';
 import { mockPatients } from '../services/mockData';
 
@@ -21,6 +21,10 @@ const PatientManagementList: React.FC<PatientManagementListProps> = ({
 }) => {
   const [statusFilter, setStatusFilter] = useState<string>(filter === 'All' ? 'all' : filter);
   const [specialistFilter, setSpecialistFilter] = useState<string>('all');
+
+  useEffect(() => {
+    setStatusFilter(filter === 'All' ? 'all' : filter);
+  }, [filter]);
 
   const selectedDateKey = useMemo(() => {
     return `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
