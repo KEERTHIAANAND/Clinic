@@ -8,7 +8,7 @@ interface DailyAppointmentsModalProps {
   date: Date;
   appointments: Appointment[];
   onClose: () => void;
-  onPatientClick: (patient: Patient) => void;
+  onPatientClick: (patient: Patient, appointment: Appointment) => void;
 }
 
 const DailyAppointmentsModal: React.FC<DailyAppointmentsModalProps> = ({
@@ -80,7 +80,7 @@ const DailyAppointmentsModal: React.FC<DailyAppointmentsModalProps> = ({
               return (
                 <button
                   key={app.id}
-                  onClick={() => patient && onPatientClick(patient)}
+                  onClick={() => patient && onPatientClick(patient, app)}
                   className={`w-full flex items-center p-5 rounded-3xl border transition-all text-left group ${
                     isEmergency
                       ? 'border-orange-200 bg-orange-50/50 ring-2 ring-orange-500/10'

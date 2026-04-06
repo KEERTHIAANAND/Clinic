@@ -7,6 +7,7 @@ import StatsOverview from '../components/StatsOverview';
 import Calendar from '../components/Calendar';
 import DailyAppointmentsModal from '../components/DailyAppointmentsModal';
 import PatientManagementList from '../components/PatientManagementList';
+import PatientDetailsModal from '../components/PatientDetailsModal';
 import { Appointment, Patient } from '@/app/admin/types';
 import { mockAppointments } from '../services/mockData';
 
@@ -21,6 +22,7 @@ export default function AdminDashboard() {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [appointments] = useState<Appointment[]>(mockAppointments);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isDailyAppointmentsOpen, setIsDailyAppointmentsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'monthly' | 'daily'>('monthly');
 
@@ -46,9 +48,15 @@ export default function AdminDashboard() {
     setViewMode('monthly');
   };
 
-  const handlePatientClick = (patient: Patient) => {
+  const handlePatientClick = (patient: Patient, appointment: Appointment) => {
     setSelectedPatient(patient);
+    setSelectedAppointment(appointment);
     setIsDailyAppointmentsOpen(false);
+  };
+
+  const handleClosePatientDetails = () => {
+    setSelectedPatient(null);
+    setSelectedAppointment(null);
   };
 
   const selectedDateKey = useMemo(() => {
@@ -135,25 +143,20 @@ export default function AdminDashboard() {
           />
         )}
 
-        {selectedPatient && (
-          <div className="mt-10 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Patient Summary</p>
-            <h3 className="text-lg font-bold text-slate-900 mb-4">{selectedPatient.name}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
-              <p>{selectedPatient.email || 'No email available'}</p>
-              <p>{selectedPatient.phone || 'No phone number available'}</p>
-              <p>{selectedPatient.currentCondition || 'No current condition documented'}</p>
-              <p>{selectedPatient.treatmentPlan || 'No treatment plan documented'}</p>
-            </div>
-          </div>
-        )}
-
         {isDailyAppointmentsOpen && (
           <DailyAppointmentsModal
             date={selectedDate}
             appointments={selectedDateAppointments}
             onClose={() => setIsDailyAppointmentsOpen(false)}
             onPatientClick={handlePatientClick}
+          />
+        )}
+
+        {selectedPatient && selectedAppointment && (
+          <PatientDetailsModal
+            patient={selectedPatient}
+            appointment={selectedAppointment}
+            onClose={handleClosePatientDetails}
           />
         )}
       </div>

@@ -132,6 +132,33 @@ const appointmentNotes: { [key: string]: string[] } = {
   ],
 };
 
+const appointmentDescriptions: { [key: string]: string[] } = {
+  '1': [
+    'Initial assessment for posture correction. Patient reports long screen-time discomfort and upper back stiffness. Plan includes mobility drills, thoracic extension work, and workstation ergonomics review.',
+    'Follow-up posture re-evaluation. Improved scapular control noted. Continue core activation and breathing integration for sustained neutral alignment.',
+  ],
+  '2': [
+    'Ankle sprain rehabilitation session focused on swelling control and progressive load-bearing. Balance board work introduced for proprioception.',
+    'Strength progression session with calf raises, resisted inversion-eversion, and gait correction. Mild soreness expected post session.',
+  ],
+  '3': [
+    'Shoulder tendinitis management visit. Manual soft-tissue release performed with pain-free ROM drills and isometric cuff loading.',
+    'Clinical review for shoulder function in overhead tasks. Reduced impingement signs; continue controlled strengthening and activity pacing.',
+  ],
+  '4': [
+    'Prenatal sciatica support session with safe stretching, pelvic positioning, and nerve gliding. Focus on pain reduction during daily activity.',
+    'Progress review for lower back and sciatic discomfort. Home exercise adherence good; added low-intensity stability routine.',
+  ],
+  '5': [
+    'Lower back pain session for desk-work strain. Mobility reset, glute activation, and spinal endurance protocol discussed in detail.',
+    'Functional movement screening performed. Patient advised on micro-break routine and lumbar support use during office hours.',
+  ],
+  '6': [
+    'Neck and shoulder postural correction treatment. Scapular stability and deep-neck-flexor endurance emphasized with guided repetitions.',
+    'Reassessment visit: decreased neck tension and better shoulder mechanics. Continue progressive loading and posture cueing program.',
+  ],
+};
+
 const createAppointment = (params: {
   id: string;
   date: string;
@@ -145,6 +172,9 @@ const createAppointment = (params: {
   const patient = mockPatients.find((p) => p.id === params.patientId) || mockPatients[0];
   const patientNotes = appointmentNotes[patient.id] || [];
   const note = patientNotes.length > 0 ? patientNotes[params.noteSeed % patientNotes.length] : undefined;
+  const patientDescriptions = appointmentDescriptions[patient.id] || [];
+  const description =
+    patientDescriptions.length > 0 ? patientDescriptions[params.noteSeed % patientDescriptions.length] : undefined;
 
   return {
     id: params.id,
@@ -154,6 +184,7 @@ const createAppointment = (params: {
     patientName: patient.name,
     time: timeSlots[params.slotIndex % timeSlots.length],
     type: params.slotIndex % 3 === 0 ? 'Initial' : params.slotIndex % 2 === 0 ? 'Follow-up' : 'Session',
+    description,
     doctorName: doctorPool[(params.daySeed + params.slotIndex) % doctorPool.length],
     isEmergency: Boolean(params.emergency),
     notes: params.status === 'Completed' ? note : undefined,

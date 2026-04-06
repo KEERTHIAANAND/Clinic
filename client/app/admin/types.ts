@@ -7,6 +7,7 @@ export interface Appointment {
   time?: string;
   type?: 'Initial' | 'Follow-up' | 'Session';
   notes?: string;
+  description?: string;
   doctorName?: string;
   isEmergency?: boolean;
 }

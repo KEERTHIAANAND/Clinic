@@ -7,7 +7,7 @@ import { mockPatients } from '../services/mockData';
 interface PatientManagementListProps {
   filter: string;
   appointments: Appointment[];
-  onPatientClick: (patient: Patient) => void;
+  onPatientClick: (patient: Patient, appointment: Appointment) => void;
   onClose: () => void;
   selectedDate: Date;
 }
@@ -159,7 +159,7 @@ const PatientManagementList: React.FC<PatientManagementListProps> = ({
                 return (
                   <tr key={app.id} className={`group transition-colors ${app.isEmergency ? 'bg-orange-50/30' : 'hover:bg-[#fcfdfe]'}`}>
                     <td className="px-10 py-5">
-                      <button onClick={() => onPatientClick(patient)} className="flex items-center space-x-4 text-left">
+                      <button onClick={() => onPatientClick(patient, app)} className="flex items-center space-x-4 text-left">
                         <div
                           className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm transition-all ${
                             app.isEmergency
