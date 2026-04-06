@@ -77,7 +77,7 @@ function PatientRecordsModal({
                     </span>
                   </div>
                   <p className="text-sm text-slate-700 mt-3 leading-7">
-                    {appointment.notes || appointment.description || 'No notes available'}
+                    {appointment.notes || 'No notes available'}
                   </p>
                 </div>
               ))
