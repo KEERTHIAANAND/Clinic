@@ -72,9 +72,6 @@ function PatientRecordsModal({
                         {appointment.time || '--:--'} · {appointment.doctorName || 'General Staff'}
                       </p>
                     </div>
-                    <span className="inline-flex rounded-full bg-teal-50 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-teal-700 w-fit">
-                      {appointment.status}
-                    </span>
                   </div>
                   <p className="text-sm text-slate-700 mt-3 leading-7">
                     {appointment.notes || 'No notes available'}
@@ -236,7 +233,6 @@ export default function PatientsPage() {
                     <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Age</th>
                     <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Gender</th>
                     <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Last Visit</th>
-                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Status</th>
                     <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Appointments</th>
                     <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Action</th>
                   </tr>
@@ -263,11 +259,6 @@ export default function PatientsPage() {
                       <td className="px-6 py-4 text-sm text-slate-700">{row.patient.gender ?? '--'}</td>
                       <td className="px-6 py-4 text-sm text-slate-700">
                         {row.lastVisit ? new Date(row.lastVisit).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No visit'}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${row.records.length > 0 ? 'bg-teal-50 text-teal-700' : 'bg-slate-100 text-slate-500'}`}>
-                          {row.records.length > 0 ? 'Visited' : 'No Visits'}
-                        </span>
                       </td>
                       <td className="px-6 py-4 text-sm font-semibold text-slate-700">{row.records.length}</td>
                       <td className="px-6 py-4">
