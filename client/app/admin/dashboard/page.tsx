@@ -192,7 +192,6 @@ export default function AdminDashboard() {
           <PatientDetailsModal
             patient={selectedPatient}
             appointment={selectedAppointment}
-            patientAppointments={patientSummaryAppointments}
             onClose={handleClosePatientDetails}
           />
         )}
