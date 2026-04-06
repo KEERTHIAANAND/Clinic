@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import StatsOverview from '../components/StatsOverview';
 import Calendar from '../components/Calendar';
@@ -72,9 +73,26 @@ export default function AdminDashboard() {
       {/* Admin Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-384 mx-auto px-6 md:px-10 py-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">Admin Dashboard</h1>
-            <p className="text-sm text-slate-600 mt-1">Welcome back, Admin</p>
+          <div className="flex items-center gap-4">
+            <div className="relative h-11 w-11">
+              <Image
+                src="/logo.png"
+                alt="Aura Health logo"
+                fill
+                sizes="44px"
+                priority
+                className="rounded-xl object-cover border border-slate-200 bg-white"
+              />
+            </div>
+            <div className="leading-tight">
+              <h1
+                className="text-xl md:text-2xl font-semibold tracking-tight text-slate-900"
+                style={{ fontFamily: 'var(--font-poppins)' }}
+              >
+                Aura Health
+              </h1>
+              <p className="text-[11px] font-semibold text-slate-500">Admin</p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             <button
