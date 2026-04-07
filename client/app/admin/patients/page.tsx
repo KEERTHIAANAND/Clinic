@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Appointment, Patient } from '@/app/admin/types';
 import { mockAppointments, mockPatients } from '../services/mockData';
+import UploadDocumentModal from '@/app/admin/components/UploadDocumentModal';
 
 function PatientRecordsModal({
   patient,
@@ -98,6 +99,7 @@ export default function PatientsPage() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [patientAppointments, setPatientAppointments] = useState<Appointment[]>([]);
+  const [uploadPatient, setUploadPatient] = useState<Patient | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -146,6 +148,14 @@ export default function PatientsPage() {
     setSelectedPatient(null);
     setSelectedAppointment(null);
     setPatientAppointments([]);
+  };
+
+  const handleOpenUpload = (patient: Patient) => {
+    setUploadPatient(patient);
+  };
+
+  const handleCloseUpload = () => {
+    setUploadPatient(null);
   };
 
   if (!isAuthenticated) {
@@ -234,7 +244,8 @@ export default function PatientsPage() {
                     <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Gender</th>
                     <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Last Visit</th>
                     <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Appointments</th>
-                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Action</th>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-right whitespace-nowrap">View Details</th>
+                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-right whitespace-nowrap">Upload Document</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -261,8 +272,29 @@ export default function PatientsPage() {
                         {row.lastVisit ? new Date(row.lastVisit).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No visit'}
                       </td>
                       <td className="px-6 py-4 text-sm font-semibold text-slate-700">{row.records.length}</td>
-                      <td className="px-6 py-4">
-                        <span className="text-sm font-semibold text-teal-700 group-hover:text-teal-800">View Details</span>
+                      <td className="px-6 py-4 text-right whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleOpenPatient(row.patient);
+                          }}
+                          className="inline-flex h-10 items-center px-2 text-sm font-semibold text-teal-700 hover:text-teal-800"
+                        >
+                          View Details
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-right whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleOpenUpload(row.patient);
+                          }}
+                          className="inline-flex h-10 items-center px-4 rounded-xl border border-slate-200 text-xs font-black uppercase tracking-widest text-slate-700 hover:bg-slate-50"
+                        >
+                          Upload Document
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -284,6 +316,13 @@ export default function PatientsPage() {
           patient={selectedPatient}
           appointments={patientAppointments}
           onClose={handleClosePatient}
+        />
+      )}
+
+      {uploadPatient && (
+        <UploadDocumentModal
+          patient={uploadPatient}
+          onClose={handleCloseUpload}
         />
       )}
     </div>
