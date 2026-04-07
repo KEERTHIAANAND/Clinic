@@ -27,6 +27,7 @@ export default function UploadDocumentModal({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<UploadResult | null>(null);
 
@@ -64,6 +65,10 @@ export default function UploadDocumentModal({
     }
 
     setSelectedFile(file);
+  };
+
+  const handleDrop = (files: FileList | null) => {
+    handleFileChange(files?.[0] ?? null);
   };
 
   const handleUpload = async () => {
@@ -128,8 +133,50 @@ export default function UploadDocumentModal({
               type="file"
               accept="application/pdf,image/*"
               onChange={(event) => handleFileChange(event.target.files?.[0] ?? null)}
-              className="block w-full text-sm text-slate-700 file:mr-4 file:rounded-xl file:border-0 file:bg-slate-900 file:px-4 file:py-2.5 file:text-xs file:font-black file:uppercase file:tracking-widest file:text-white hover:file:bg-slate-800"
+              className="sr-only"
             />
+
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => fileInputRef.current?.click()}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  fileInputRef.current?.click();
+                }
+              }}
+              onDragEnter={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setIsDragging(true);
+              }}
+              onDragOver={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setIsDragging(true);
+              }}
+              onDragLeave={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setIsDragging(false);
+              }}
+              onDrop={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setIsDragging(false);
+                handleDrop(event.dataTransfer.files);
+              }}
+              className={[
+                'rounded-3xl border-2 border-dashed px-5 py-8 text-center transition-colors cursor-pointer select-none',
+                isDragging ? 'border-teal-300 bg-teal-50/60' : 'border-slate-200 bg-slate-50/40 hover:bg-slate-50',
+              ].join(' ')}
+              aria-label="Upload a PDF or image"
+            >
+              <p className="text-sm font-bold text-slate-900">Drag & drop a PDF or image here</p>
+              <p className="text-xs text-slate-500 mt-2">or click to browse</p>
+              <p className="text-[11px] text-slate-500 mt-3">Accepted: PDF, PNG, JPG, JPEG, WEBP</p>
+            </div>
 
             {selectedFile && (
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
