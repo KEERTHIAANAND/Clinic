@@ -165,7 +165,7 @@ export default function PatientsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 flex items-center justify-between gap-4">
+        <div className="max-w-384 mx-auto px-6 md:px-10 py-6 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative h-11 w-11">
               <Image
@@ -197,7 +197,7 @@ export default function PatientsPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 md:px-10 py-10 space-y-6">
+      <main className="max-w-384 mx-auto px-6 md:px-10 py-10 space-y-6">
         <section className="bg-white rounded-4xl border border-gray-100 shadow-sm p-6 md:p-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
             <div>
@@ -279,7 +279,7 @@ export default function PatientsPage() {
                             event.stopPropagation();
                             handleOpenPatient(row.patient);
                           }}
-                          className="inline-flex h-10 items-center px-2 text-sm font-semibold text-teal-700 hover:text-teal-800"
+                          className="inline-flex h-10 items-center px-2 text-sm font-semibold text-teal-700 hover:text-teal-900 cursor-pointer transition-colors"
                         >
                           View Details
                         </button>
@@ -291,7 +291,7 @@ export default function PatientsPage() {
                             event.stopPropagation();
                             handleOpenUpload(row.patient);
                           }}
-                          className="inline-flex h-10 items-center px-4 rounded-xl border border-slate-200 text-xs font-black uppercase tracking-widest text-slate-700 hover:bg-slate-50"
+                          className="inline-flex h-10 items-center px-4 rounded-xl border border-slate-200 text-xs font-black hover:text-teal-900 uppercase tracking-widest text-slate-700 hover:bg-slate-50 cursor-pointer"
                         >
                           Upload Document
                         </button>

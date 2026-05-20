@@ -45,7 +45,7 @@ const Hero: React.FC = () => {
   return (
     <>
       <section
-        className="relative min-h-[80vh] bg-[#0d2222] overflow-hidden flex items-center pt-28 pb-16"
+        className="relative min-h-screen bg-[#0d2222] overflow-hidden flex items-center pt-28 pb-16"
         aria-label="Hero – Mano Rehabilitation Centre"
       >
         {/* Ambient background glows */}
